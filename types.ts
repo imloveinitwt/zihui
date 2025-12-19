@@ -17,6 +17,24 @@ export interface Font {
   scenarios?: string; // 适用场景
 }
 
+export interface TrendCase {
+  title: string;
+  brand: string;
+  description: string;
+  features: string[];
+  parameters: Record<string, string>;
+  previewColor?: string;
+}
+
+export interface Trend {
+  id: string;
+  title: string;
+  desc: string;
+  tag: string;
+  color: string;
+  cases: TrendCase[];
+}
+
 export interface FontPairing {
   heading: string;
   body: string;

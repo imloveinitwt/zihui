@@ -35,100 +35,105 @@ const AIPairing: React.FC<AIPairingProps> = ({ onImportFont, existingFontFamilie
       category: isHeading ? Category.SERIF : Category.SANS_SERIF,
       description: `AI 推荐用于 ${prompt} 的${isHeading ? '标题' : '正文'}字体`,
     });
-    // Fix: changed setAddedFamilies to setAddedFonts to match the state setter defined above
     setAddedFonts(prev => [...prev, family]);
   };
 
   return (
-    <section className="bg-gradient-to-br from-indigo-900 via-blue-900 to-slate-900 rounded-[3rem] p-10 lg:p-14 text-white shadow-2xl overflow-hidden relative min-h-full flex flex-col justify-center">
-      <div className="absolute top-0 right-0 p-16 opacity-10 pointer-events-none">
-        <Sparkles size={350} strokeWidth={1} />
+    <section className="bg-slate-900 rounded-[10px] p-10 text-white shadow-xl relative overflow-hidden flex flex-col justify-center min-h-[440px]">
+      <div className="absolute top-0 right-0 p-10 opacity-5 pointer-events-none">
+        <Sparkles size={240} strokeWidth={1} />
       </div>
 
       <div className="relative z-10 w-full">
-        <div className="flex items-center gap-4 mb-6">
-          <div className="bg-blue-500/20 p-3 rounded-xl">
-            <Sparkles className="text-blue-400" size={28} />
+        {loading && (
+          <div className="absolute -top-10 left-0 w-full h-1 bg-white/10 overflow-hidden">
+            <div className="h-full bg-gradient-to-r from-rose-500 to-orange-500 animate-[progress_1.5s_ease-in-out_infinite]" style={{ width: '40%' }}></div>
           </div>
-          <h2 className="text-3xl font-black tracking-tight">AI 智能搭配顾问</h2>
+        )}
+
+        <div className="flex items-center gap-3 mb-4">
+          <div className="bg-rose-500/20 p-2 rounded-[10px] transition-transform hover:rotate-15-hover">
+            <Sparkles className="text-rose-400" size={24} />
+          </div>
+          <h2 className="text-[18px] font-semibold tracking-tight">AI 智能配对顾问</h2>
         </div>
-        <p className="text-blue-100/70 mb-10 text-xl leading-relaxed">
-          告诉我们您的项目愿景，AI 将为您精准匹配极致的文字组合方案。
+        <p className="text-slate-400 mb-8 text-[14px]">
+          只需输入项目愿景，AI 将为您推荐极致的文字排版组合。
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-4 mb-10">
+        <div className="flex flex-col sm:flex-row gap-3 mb-8">
           <input
             type="text"
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            placeholder="描述项目愿景，如：极简现代摄影集"
-            className="flex-grow bg-white/10 border border-white/20 rounded-2xl px-6 py-4 text-lg text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white/20 transition-all"
+            placeholder="描述氛围，如：极简摄影、赛博朋克..."
+            className="flex-grow bg-white/10 border border-white/10 rounded-[10px] px-4 py-3 text-[14px] text-white placeholder:text-white/30 outline-none focus:border-rose-500 focus:bg-white/20 transition-all"
             onKeyDown={(e) => e.key === 'Enter' && handleGenerate()}
           />
           <button
             onClick={handleGenerate}
             disabled={loading || !prompt}
-            className="bg-blue-600 hover:bg-blue-500 disabled:bg-slate-700 text-white font-black rounded-2xl px-10 py-4 text-base transition-all flex items-center justify-center gap-3 whitespace-nowrap shadow-xl active:scale-95"
+            className="bg-rose-600 hover:bg-rose-500 disabled:bg-slate-700 text-white font-semibold rounded-[10px] px-8 py-3 text-[13px] transition-all flex items-center justify-center gap-2 whitespace-nowrap shadow-lg active:scale-95"
           >
-            {loading ? <Loader2 className="animate-spin" size={22} /> : '探索无限可能'}
+            {loading ? <Loader2 className="animate-spin" size={18} /> : '开启探索'}
           </button>
         </div>
 
         {pairing && (
-          <div className="animate-in fade-in slide-in-from-bottom-6 duration-700 bg-white/10 backdrop-blur-2xl rounded-[2rem] p-8 border border-white/10">
-            <div className="grid md:grid-cols-2 gap-10">
-              <div className="space-y-10">
-                <div className="relative group/font">
-                  <div className="flex justify-between items-start mb-3">
-                    <label className="text-xs font-black uppercase tracking-[0.2em] text-blue-400 opacity-60">标题推荐 / Headline</label>
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 bg-white/5 border border-white/10 rounded-[10px] p-6 backdrop-blur-sm">
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="space-y-8">
+                <div className="group/item">
+                  <div className="flex justify-between items-center mb-2">
+                    <label className="text-[13px] font-bold uppercase tracking-widest text-rose-400">标题推荐</label>
                     <button 
                       onClick={() => handleImport(pairing.heading, true)}
                       disabled={addedFonts.includes(pairing.heading) || existingFontFamilies.includes(pairing.heading)}
-                      className="p-2.5 rounded-xl bg-white/5 hover:bg-white/20 transition-all flex items-center gap-2 text-xs font-black"
+                      className="text-[13px] font-bold text-rose-400 hover:text-rose-300 disabled:text-green-400 flex items-center gap-1 transition-all"
                     >
-                      {addedFonts.includes(pairing.heading) || existingFontFamilies.includes(pairing.heading) ? <Check size={14} className="text-green-400" /> : <Plus size={14} />}
-                      {addedFonts.includes(pairing.heading) || existingFontFamilies.includes(pairing.heading) ? '已收藏' : '加入库'}
+                      {addedFonts.includes(pairing.heading) || existingFontFamilies.includes(pairing.heading) ? <Check size={14} /> : <Plus size={14} />}
+                      {addedFonts.includes(pairing.heading) || existingFontFamilies.includes(pairing.heading) ? '已收录' : '库中保存'}
                     </button>
                   </div>
                   <p 
                     style={{ fontFamily: `"${pairing.heading}", serif` }}
-                    className="text-5xl md:text-6xl font-medium leading-none mb-2"
+                    className="text-4xl font-medium leading-none mb-1 group-hover/item:translate-x-1 transition-transform"
                   >
                     视觉焦点
                   </p>
-                  <p className="text-sm text-white/40 font-mono tracking-widest uppercase">{pairing.heading}</p>
+                  <p className="text-[13px] text-white/30 font-mono tracking-widest uppercase">{pairing.heading}</p>
                 </div>
 
-                <div className="relative group/font">
-                  <div className="flex justify-between items-start mb-3">
-                    <label className="text-xs font-black uppercase tracking-[0.2em] text-blue-400 opacity-60">正文推荐 / Body</label>
+                <div className="group/item">
+                  <div className="flex justify-between items-center mb-2">
+                    <label className="text-[13px] font-bold uppercase tracking-widest text-rose-400">正文推荐</label>
                     <button 
                       onClick={() => handleImport(pairing.body, false)}
                       disabled={addedFonts.includes(pairing.body) || existingFontFamilies.includes(pairing.body)}
-                      className="p-2.5 rounded-xl bg-white/5 hover:bg-white/20 transition-all flex items-center gap-2 text-xs font-black"
+                      className="text-[13px] font-bold text-rose-400 hover:text-rose-300 disabled:text-green-400 flex items-center gap-1 transition-all"
                     >
-                      {addedFonts.includes(pairing.body) || existingFontFamilies.includes(pairing.body) ? <Check size={14} className="text-green-400" /> : <Plus size={14} />}
-                      {addedFonts.includes(pairing.body) || existingFontFamilies.includes(pairing.body) ? '已收藏' : '加入库'}
+                      {addedFonts.includes(pairing.body) || existingFontFamilies.includes(pairing.body) ? <Check size={14} /> : <Plus size={14} />}
+                      {addedFonts.includes(pairing.body) || existingFontFamilies.includes(pairing.body) ? '已收录' : '库中保存'}
                     </button>
                   </div>
                   <p 
                     style={{ fontFamily: `"${pairing.body}", sans-serif` }}
-                    className="text-lg leading-relaxed text-white/80 font-medium"
+                    className="text-[14px] leading-relaxed text-white/80 group-hover/item:translate-x-1 transition-transform"
                   >
                     通过精准的字重平衡和行间距调优，即使在移动端阅读也能享受极佳的舒适感。
                   </p>
-                  <p className="text-sm text-white/40 font-mono tracking-widest uppercase mt-3">{pairing.body}</p>
+                  <p className="text-[13px] text-white/30 font-mono tracking-widest uppercase mt-2">{pairing.body}</p>
                 </div>
               </div>
 
-              <div className="bg-white/5 rounded-2xl p-8 border border-white/5 flex flex-col justify-center space-y-8">
+              <div className="bg-white/5 rounded-[10px] p-5 space-y-4 border border-white/5">
                 <div>
-                  <h4 className="text-xs font-black text-blue-300 mb-2 uppercase tracking-widest opacity-50">设计调性 / VIBE</h4>
-                  <p className="text-2xl font-black border-l-4 border-blue-500 pl-4 text-white">{pairing.vibe}</p>
+                  <h4 className="text-[13px] font-bold text-rose-300 opacity-50 uppercase tracking-widest">氛围特征</h4>
+                  <p className="text-[16px] font-bold text-white mt-1">{pairing.vibe}</p>
                 </div>
                 <div>
-                  <h4 className="text-xs font-black text-blue-300 mb-2 uppercase tracking-widest opacity-50">推荐逻辑 / REASON</h4>
-                  <p className="text-base text-white/70 italic leading-relaxed font-medium">“{pairing.reason}”</p>
+                  <h4 className="text-[13px] font-bold text-rose-300 opacity-50 uppercase tracking-widest">推荐逻辑</h4>
+                  <p className="text-[13px] text-white/70 italic leading-relaxed mt-2 border-l border-rose-500/30 pl-3">“{pairing.reason}”</p>
                 </div>
               </div>
             </div>

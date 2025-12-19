@@ -1,41 +1,117 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FontCanvas</title>
+    <title>字绘.Lab - 现代字体预览与发现</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-      body {
-        font-family: 'Inter', sans-serif;
-        background-color: #f9fafb;
+      :root {
+        --primary-rose: #e11d48;
+        --primary-indigo: #4f46e5;
+        --secondary: #64748b;
+        --neutral-bg: #f8fafc;
+        --neutral-border: #e2e8f0;
+        --text-main: #0f172a;
+        --text-sub: #475569;
       }
-      /* Custom scrollbar for a cleaner look */
+      body {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        background-color: var(--neutral-bg);
+        color: var(--text-main);
+        font-size: 14px;
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+      }
+      h1, h2, h3 {
+        font-size: 18px;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+      }
+      
+      /* 核心规则：按钮点击缩放 0.98，持续 100ms，无弹跳 */
+      button, .clickable {
+        transition: transform 100ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      button:active, .clickable:active {
+        transform: scale(0.98) !important;
+      }
+
+      /* 自定义滚动条 - 极简扁平风格 */
       ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
+        width: 5px;
+        height: 5px;
       }
       ::-webkit-scrollbar-track {
-        background: #f1f1f1;
+        background: transparent;
       }
       ::-webkit-scrollbar-thumb {
         background: #cbd5e1;
-        border-radius: 4px;
+        border-radius: 10px;
       }
       ::-webkit-scrollbar-thumb:hover {
         background: #94a3b8;
       }
-      /* Utility to hide scrollbars */
-      .no-scrollbar::-webkit-scrollbar {
-        display: none;
+      
+      /* 骨架屏脉冲动画 */
+      @keyframes skeleton-pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.4; }
       }
-      .no-scrollbar {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
+      .animate-skeleton {
+        animation: skeleton-pulse 1.8s ease-in-out infinite;
+      }
+
+      /* 菜单展开：淡入 + 平移 (Y 轴 -5px)，200ms */
+      .menu-enter {
+        animation: menu-slide-in 200ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+      @keyframes menu-slide-in {
+        from {
+          opacity: 0;
+          transform: translateY(5px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* 全屏放大动效 (作品预览) */
+      .expand-enter {
+        animation: expand-in 300ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      }
+      @keyframes expand-in {
+        from {
+          opacity: 0;
+          transform: scale(0.9) translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1) translateY(0);
+        }
+      }
+
+      /* 选中态描边闪烁 - 兼容双色 */
+      @keyframes stroke-blink-rose {
+        0%, 100% { border-color: rgba(225, 29, 72, 0.8); box-shadow: 0 0 0 2px rgba(225, 29, 72, 0.1); }
+        50% { border-color: rgba(225, 29, 72, 0.2); box-shadow: 0 0 0 0px rgba(225, 29, 72, 0); }
+      }
+      @keyframes stroke-blink-indigo {
+        0%, 100% { border-color: rgba(79, 70, 229, 0.8); box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1); }
+        50% { border-color: rgba(79, 70, 229, 0.2); box-shadow: 0 0 0 0px rgba(79, 70, 229, 0); }
+      }
+      .selected-blink-rose { animation: stroke-blink-rose 600ms ease-in-out infinite; }
+      .selected-blink-indigo { animation: stroke-blink-indigo 600ms ease-in-out infinite; }
+      
+      .rotate-15-hover:hover {
+        transform: rotate(15deg);
       }
     </style>
 <script type="importmap">
