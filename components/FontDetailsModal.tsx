@@ -9,9 +9,10 @@ interface Props {
   previewText: string;
   isFavorite: boolean;
   onToggleFavorite: (font: Font) => void;
+  onDownloadRequest?: () => void;
 }
 
-const FontDetailsModal: React.FC<Props> = ({ font, onClose, previewText, isFavorite, onToggleFavorite }) => {
+const FontDetailsModal: React.FC<Props> = ({ font, onClose, previewText, isFavorite, onToggleFavorite, onDownloadRequest }) => {
   const [currentVariant, setCurrentVariant] = useState(font.variants.includes('400') ? '400' : font.variants[0]);
   const isChinese = font.subsets.includes('chinese-simplified');
 
@@ -142,7 +143,10 @@ const FontDetailsModal: React.FC<Props> = ({ font, onClose, previewText, isFavor
             >
               返回列表
             </button>
-            <button className={`px-6 py-2.5 rounded-[10px] ${accentBg} text-white font-semibold text-[13px] hover:opacity-90 transition-all shadow-lg ${accentShadow} flex items-center gap-2 active:scale-95`}>
+            <button 
+              onClick={() => onDownloadRequest?.()}
+              className={`px-6 py-2.5 rounded-[10px] ${accentBg} text-white font-semibold text-[13px] hover:opacity-90 transition-all shadow-lg ${accentShadow} flex items-center gap-2 active:scale-95`}
+            >
               <Download size={16} /> 立即下载安装
             </button>
           </div>

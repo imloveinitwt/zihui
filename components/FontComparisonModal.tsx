@@ -8,9 +8,10 @@ interface Props {
   onClose: () => void;
   onRemove: (font: Font) => void;
   previewText: string;
+  onDownloadRequest?: () => void;
 }
 
-const FontComparisonModal: React.FC<Props> = ({ fonts, onClose, onRemove, previewText: initialPreview }) => {
+const FontComparisonModal: React.FC<Props> = ({ fonts, onClose, onRemove, previewText: initialPreview, onDownloadRequest }) => {
   const [comparisonText, setComparisonText] = useState(initialPreview || "文字排版之美，始于细节。");
   const [compFontSize, setCompFontSize] = useState(48);
   // 为每个字体家族独立存储选中的字重
@@ -141,7 +142,10 @@ const FontComparisonModal: React.FC<Props> = ({ fonts, onClose, onRemove, previe
                         {font.features || "尚未录入具体风格描述。这款字体通过对空间与比例的精准把控，旨在创造一种独特的阅读体验。"}
                       </p>
                     </div>
-                    <button className={`w-full flex items-center justify-center gap-2 py-3.5 rounded-[12px] font-bold text-[14px] text-white shadow-xl transition-all active:scale-[0.98] ${isChinese ? 'bg-rose-600 hover:bg-rose-500 shadow-rose-200' : 'bg-indigo-600 hover:bg-indigo-500 shadow-indigo-200'}`}>
+                    <button 
+                      onClick={() => onDownloadRequest?.()}
+                      className={`w-full flex items-center justify-center gap-2 py-3.5 rounded-[12px] font-bold text-[14px] text-white shadow-xl transition-all active:scale-[0.98] ${isChinese ? 'bg-rose-600 hover:bg-rose-500 shadow-rose-200' : 'bg-indigo-600 hover:bg-indigo-500 shadow-indigo-200'}`}
+                    >
                       <Download size={18} /> 下载该家族
                     </button>
                   </div>

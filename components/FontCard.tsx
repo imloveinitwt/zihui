@@ -12,6 +12,7 @@ interface FontCardProps {
   onToggleFavorite: (font: Font) => void;
   isComparing?: boolean;
   onToggleCompare?: () => void;
+  onDownloadRequest?: () => void;
   draggable?: boolean;
   theme?: string;
 }
@@ -25,6 +26,7 @@ const FontCard: React.FC<FontCardProps> = ({
   onToggleFavorite, 
   isComparing,
   onToggleCompare,
+  onDownloadRequest,
   draggable, 
   theme = 'classic' 
 }) => {
@@ -262,7 +264,10 @@ const FontCard: React.FC<FontCardProps> = ({
         <span className={`text-[11px] font-black px-3 py-1.5 rounded-lg ${themeClasses.footerBtn}`}>
           {categoryMap[font.category] || font.category}
         </span>
-        <button className={`flex items-center gap-2 text-[13px] font-bold transition-all hover:gap-3 ${isChinese ? 'text-rose-600' : 'text-indigo-600'}`}>
+        <button 
+          onClick={(e) => { e.stopPropagation(); onDownloadRequest?.(); }}
+          className={`flex items-center gap-2 text-[13px] font-bold transition-all hover:gap-3 ${isChinese ? 'text-rose-600' : 'text-indigo-600'}`}
+        >
           下载字体 <Download size={16} />
         </button>
       </div>
